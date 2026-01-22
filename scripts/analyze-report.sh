@@ -28,6 +28,8 @@ fi
 PROVIDER=""
 if [ -n "$ANTHROPIC_API_KEY" ]; then
   PROVIDER="anthropic"
+elif [ -n "$OPENAI_API_KEY" ]; then
+  PROVIDER="openai"
 elif [ -n "$OPENROUTER_API_KEY" ]; then
   PROVIDER="openrouter"
 elif [ -n "$VERCEL_OIDC_TOKEN" ]; then
@@ -55,7 +57,10 @@ if [ -z "$PROVIDER" ]; then
   echo "║  Option 2: Anthropic API (direct)                                ║" >&2
   echo "║    export ANTHROPIC_API_KEY=sk-ant-...                           ║" >&2
   echo "║                                                                  ║" >&2
-  echo "║  Option 3: OpenRouter                                            ║" >&2
+  echo "║  Option 3: OpenAI API (direct)                                   ║" >&2
+  echo "║    export OPENAI_API_KEY=sk-...                                  ║" >&2
+  echo "║                                                                  ║" >&2
+  echo "║  Option 4: OpenRouter                                            ║" >&2
   echo "║    export OPENROUTER_API_KEY=sk-or-...                           ║" >&2
   echo "║                                                                  ║" >&2
   echo "╚══════════════════════════════════════════════════════════════════╝" >&2
@@ -105,6 +110,18 @@ case "$PROVIDER" in
         \"messages\": [{\"role\": \"user\", \"content\": $PROMPT_ESCAPED}]
       }")
     TEXT=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+    ;;
+    
+  openai)
+    RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -d "{
+        \"model\": \"gpt-5.2\",
+        \"max_tokens\": 1024,
+        \"messages\": [{\"role\": \"user\", \"content\": $PROMPT_ESCAPED}]
+      }")
+    TEXT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // empty')
     ;;
     
   openrouter)
