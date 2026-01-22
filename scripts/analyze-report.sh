@@ -30,10 +30,16 @@ if [ -n "$ANTHROPIC_API_KEY" ]; then
   PROVIDER="anthropic"
 elif [ -n "$OPENROUTER_API_KEY" ]; then
   PROVIDER="openrouter"
-elif [ -n "$AI_GATEWAY_API_KEY" ]; then
+elif [ -n "$VERCEL_OIDC_TOKEN" ]; then
+  # Vercel AI Gateway with OIDC auth (from `vercel env pull`)
   PROVIDER="gateway"
-  # Default to Vercel AI Gateway URL if not specified
   AI_GATEWAY_URL="${AI_GATEWAY_URL:-https://ai-gateway.vercel.sh/v1}"
+  AI_GATEWAY_AUTH_TOKEN="$VERCEL_OIDC_TOKEN"
+elif [ -n "$AI_GATEWAY_API_KEY" ]; then
+  # Vercel AI Gateway with API key
+  PROVIDER="gateway"
+  AI_GATEWAY_URL="${AI_GATEWAY_URL:-https://ai-gateway.vercel.sh/v1}"
+  AI_GATEWAY_AUTH_TOKEN="$AI_GATEWAY_API_KEY"
 fi
 
 if [ -z "$PROVIDER" ]; then
@@ -116,7 +122,7 @@ case "$PROVIDER" in
     MODEL="${AI_GATEWAY_MODEL:-anthropic/claude-sonnet-4-20250514}"
     RESPONSE=$(curl -s "${AI_GATEWAY_URL}/chat/completions" \
       -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $AI_GATEWAY_API_KEY" \
+      -H "Authorization: Bearer $AI_GATEWAY_AUTH_TOKEN" \
       -d "{
         \"model\": \"$MODEL\",
         \"max_tokens\": 1024,
