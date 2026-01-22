@@ -70,19 +70,26 @@ flowchart TD
 
 ### Installation
 
+Compound Product installs into your existing project repository. It adds scripts and configuration that work alongside your codebase.
+
 ```bash
-# Clone the repo
+# Clone compound-product somewhere temporary
 git clone https://github.com/snarktank/compound-product.git
 cd compound-product
 
-# Run the installer
+# Install into your project
 ./install.sh /path/to/your/project
 ```
 
-Or tell your AI agent:
+Or tell your AI agent (from within your project):
 ```
-Install compound-product from https://github.com/snarktank/compound-product
+Install compound-product from https://github.com/snarktank/compound-product into this repo
 ```
+
+This creates:
+- `scripts/compound/` - The automation scripts
+- `compound.config.json` - Configuration for your project
+- `reports/` - Directory for your daily reports (you provide these)
 
 ### Configuration
 
