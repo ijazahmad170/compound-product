@@ -48,6 +48,11 @@ flowchart TD
         EXIT --> PUSH[Git Push]
         PUSH --> PR[🎉 Pull Request<br/>Ready for review]
     end
+    
+    click A "https://github.com/snarktank/compound-product/blob/main/scripts/analyze-report.sh" "View analyze-report.sh"
+    click LOOP "https://github.com/snarktank/compound-product/blob/main/scripts/loop.sh" "View loop.sh"
+    click PRD "https://github.com/snarktank/compound-product/blob/main/skills/prd/SKILL.md" "View PRD skill"
+    click TASKS "https://github.com/snarktank/compound-product/blob/main/skills/tasks/SKILL.md" "View Tasks skill"
 ```
 
 ## Quick Start
